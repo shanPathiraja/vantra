@@ -5,9 +5,10 @@
   "private": true,
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "start": "node dist/main.js",
+    "start": "node dist/src/main.js",
     "start:dev": "ts-node-dev --respawn src/main.ts",
     "seed": "ts-node scripts/seed.ts",
+    "seed:dist": "node dist/scripts/seed.js",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "jest"
   },
@@ -47,5 +48,8 @@
     "testEnvironment": "node",
     "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$"
+  },
+  "allowScripts": {
+    "bcrypt@5.1.1": true
   }
 }

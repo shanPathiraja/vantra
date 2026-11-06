@@ -1,0 +1,13 @@
+# Host-built native modules (e.g. bcrypt compiled for macOS) must never
+# overwrite the Linux ones installed inside the image.
+node_modules
+dist
+*.tsbuildinfo
+
+# Local secrets/config stay out of the image; compose passes env explicitly.
+.env
+
+.git
+*.log
+coverage
+.DS_Store

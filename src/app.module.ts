@@ -22,4 +22,4 @@ import { CommonModule } from './common/common.module';
     CommonModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }

@@ -16,6 +16,8 @@
  * here.
  */
 import 'reflect-metadata';
+import * as dotenv from 'dotenv';
+dotenv.config();
 import mongoose from 'mongoose';
 import * as bcrypt from 'bcrypt';
 
