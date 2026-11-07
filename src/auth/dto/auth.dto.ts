@@ -7,6 +7,12 @@ export class RegisterDto {
   @IsString()
   @MinLength(8)
   password: string;
+
+  @IsString()
+  tenantId: string;
+
+  @IsString()
+  role: string;
 }
 
 export class LoginDto {

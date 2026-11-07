@@ -7,15 +7,20 @@ import { Vehicle, VehicleDocument } from './schemas/vehicle.schema';
 export class VehiclesService {
   constructor(@InjectModel(Vehicle.name) private vehicleModel: Model<VehicleDocument>) {}
 
-  findAll() {
-    return this.vehicleModel.find().exec();
+  findAll(tenantId?: string) {
+    const filter = tenantId ? { tenantId } : {};
+    return this.vehicleModel.find(filter).exec();
   }
 
-  findByVehicleId(vehicleId: string) {
-    return this.vehicleModel.findOne({ vehicleId }).exec();
+  findByVehicleId(vehicleId: string, tenantId?: string) {
+    const filter: Record<string, unknown> = { vehicleId };
+    if (tenantId) {
+      filter.tenantId = tenantId;
+    }
+    return this.vehicleModel.findOne(filter).exec();
   }
 
-  create(vehicleId: string, fleetName: string) {
-    return this.vehicleModel.create({ vehicleId, fleetName });
+  create(vehicleId: string, fleetName: string, tenantId?: string) {
+    return this.vehicleModel.create({ vehicleId, fleetName, tenantId });
   }
 }

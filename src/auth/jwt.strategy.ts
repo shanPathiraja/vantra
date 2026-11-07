@@ -21,8 +21,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: JwtPayload): Promise<RequestUser> {
-    if (!payload.sub || !payload.tenantId) {
+  async validate(payload: JwtPayload): Promise < RequestUser > {
+      if(!payload.sub || !payload.tenantId) {
       throw new UnauthorizedException('Token missing required tenant or identity claims');
     }
     return {

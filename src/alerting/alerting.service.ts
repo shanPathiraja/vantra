@@ -49,8 +49,12 @@ export class AlertingService {
     });
   }
 
-  findActiveForVehicle(vehicleId: string) {
-    return this.alertModel.find({ vehicleId, resolvedAt: null }).exec();
+  findActiveForVehicle(vehicleId: string, tenantId?: string) {
+    const filter: Record<string, unknown> = { vehicleId, resolvedAt: null };
+    if (tenantId) {
+      filter.tenantId = tenantId;
+    }
+    return this.alertModel.find(filter).exec();
   }
 
   resolve(alertId: string) {

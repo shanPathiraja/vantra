@@ -11,22 +11,24 @@ export class DashboardService {
     @InjectModel(TelemetryEvent.name) private telemetryModel: Model<TelemetryEventDocument>,
   ) {}
 
-  async getFleetOverview() {
-    return this.vehiclesService.findAll();
+  async getFleetOverview(tenantId?: string) {
+    return this.vehiclesService.findAll(tenantId);
   }
 
   /**
    * Returns the latest known telemetry reading for every vehicle in the fleet.
-   * This is the most frequently hit read on the dashboard.
+   * Scoped to tenantId when provided.
    */
-  async getVehicleStatuses() {
-    const vehicles = await this.vehiclesService.findAll();
+  async getVehicleStatuses(tenantId?: string) {
+    const vehicles = await this.vehiclesService.findAll(tenantId);
     const statuses: { vehicle: unknown; latest: unknown }[] = [];
     for (const vehicle of vehicles) {
-      // One query per vehicle - fine for a handful of vehicles in dev,
-      // but this is the hot path so keep an eye on it as fleet size grows.
+      const filter: Record<string, unknown> = { vehicleId: vehicle.vehicleId };
+      if (tenantId) {
+        filter.tenantId = tenantId;
+      }
       const latest = await this.telemetryModel
-        .findOne({ vehicleId: vehicle.vehicleId })
+        .findOne(filter)
         .sort({ recordedAt: -1 })
         .exec();
       statuses.push({ vehicle, latest });

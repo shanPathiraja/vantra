@@ -1,24 +1,47 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { CurrentUser, RequestUser } from '../auth/decorators/current-user.decorator';
 import { VehiclesService } from './vehicles.service';
 
 @Controller('vehicles')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class VehiclesController {
   constructor(private readonly vehiclesService: VehiclesService) {}
 
   @Get()
-  findAll() {
-    return this.vehiclesService.findAll();
+  findAll(@CurrentUser() user: RequestUser) {
+    return this.vehiclesService.findAll(user.tenantId);
   }
 
   @Get(':vehicleId')
-  findOne(@Param('vehicleId') vehicleId: string) {
-    return this.vehiclesService.findByVehicleId(vehicleId);
+  async findOne(
+    @Param('vehicleId') vehicleId: string,
+    @CurrentUser() user: RequestUser,
+  ) {
+    const vehicle = await this.vehiclesService.findByVehicleId(vehicleId, user.tenantId);
+    if (!vehicle) {
+      throw new NotFoundException(`Vehicle ${vehicleId} not found`);
+    }
+    return vehicle;
   }
 
   @Post()
-  create(@Body('vehicleId') vehicleId: string, @Body('fleetName') fleetName: string) {
-    return this.vehiclesService.create(vehicleId, fleetName);
+  @Roles('admin')
+  create(
+    @Body('vehicleId') vehicleId: string,
+    @Body('fleetName') fleetName: string,
+    @CurrentUser() user: RequestUser,
+  ) {
+    return this.vehiclesService.create(vehicleId, fleetName, user.tenantId);
   }
 }
