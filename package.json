@@ -9,6 +9,7 @@
     "start:dev": "ts-node-dev --respawn src/main.ts",
     "seed": "ts-node scripts/seed.ts",
     "seed:dist": "node dist/scripts/seed.js",
+    "migrate:tenants": "ts-node scripts/migrate-tenants.ts",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "jest"
   },
