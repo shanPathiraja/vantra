@@ -20,9 +20,9 @@ export class AlertingService {
     // through IngestionService/VehiclesService - convenient short-term, but
     // means this module now knows about telemetry's schema shape directly.
     @InjectModel(TelemetryEvent.name) private telemetryModel: Model<TelemetryEventDocument>,
-  ) {}
+  ) { }
 
-  async checkVehicleOffline(vehicleId: string, lastSeenAt: Date) {
+  async checkVehicleOffline(vehicleId: string, lastSeenAt: Date, tenantId: string) {
     const staleFor = Date.now() - lastSeenAt.getTime();
     if (staleFor <= OFFLINE_THRESHOLD_MS) {
       return null;
@@ -46,6 +46,7 @@ export class AlertingService {
       vehicleId,
       type: 'vehicle-offline',
       message: `Vehicle ${vehicleId} has not reported telemetry in over 15 minutes`,
+      tenantId
     });
   }
 
@@ -75,7 +76,7 @@ export class AlertingService {
         .sort({ recordedAt: -1 })
         .exec();
       if (latest) {
-        await this.checkVehicleOffline(vehicleId, latest.recordedAt);
+        await this.checkVehicleOffline(vehicleId, latest.recordedAt, latest.tenantId);
       }
     }
   }
