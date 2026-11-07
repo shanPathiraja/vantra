@@ -8,6 +8,7 @@ import { IngestionModule } from './ingestion/ingestion.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { AlertingModule } from './alerting/alerting.module';
 import { CommonModule } from './common/common.module';
+import { TenantsModule } from './tenants/tenants.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { CommonModule } from './common/common.module';
     DashboardModule,
     AlertingModule,
     CommonModule,
+    TenantsModule,
   ],
 })
 export class AppModule { }
