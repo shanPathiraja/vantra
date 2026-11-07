@@ -6,6 +6,9 @@ export type AlertDocument = Alert & Document;
 @Schema({ timestamps: true })
 export class Alert {
   @Prop({ required: true, index: true })
+  tenantId: string;
+
+  @Prop({ required: true, index: true })
   vehicleId: string;
 
   @Prop({ required: true })

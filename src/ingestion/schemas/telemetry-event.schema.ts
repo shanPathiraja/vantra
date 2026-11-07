@@ -6,6 +6,9 @@ export type TelemetryEventDocument = TelemetryEvent & Document;
 @Schema({ timestamps: { createdAt: 'receivedAt', updatedAt: false } })
 export class TelemetryEvent {
   @Prop({ required: true, index: true })
+  tenantId: string;
+
+  @Prop({ required: true, index: true })
   vehicleId: string;
 
   @Prop({ required: true })

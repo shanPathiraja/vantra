@@ -5,7 +5,10 @@ export type VehicleDocument = Vehicle & Document;
 
 @Schema({ timestamps: true })
 export class Vehicle {
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true, index: true })
+  tenantId: string;
+
+  @Prop({ required: true })
   vehicleId: string;
 
   @Prop({ required: true })

@@ -11,8 +11,17 @@ export class User {
   @Prop({ required: true })
   passwordHash: string;
 
-  @Prop({ default: 'dispatcher' })
+  @Prop({ default: 'dispatcher', enum: ['admin', 'dispatcher'] })
   role: string;
+
+  @Prop({ required: true, index: true })
+  tenantId: string;
+
+  @Prop({ default: false })
+  mustChangePassword?: boolean;
+
+  @Prop({ default: false })
+  isTemporary?: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
